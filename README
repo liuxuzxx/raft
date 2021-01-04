@@ -4,3 +4,15 @@
 Raft协议是一个一致性的协议，算是简单版本的Paxos协议的变通实现，需要真实的使用Go代码
 来实现一下，帮助理解，也揭开这些个所谓协议的神秘面纱！
 ```
+
+# In Search of an Understandable Consensus Algorithm (Extend Version)
+
+## 概述
+Raft是一个共识的算法！
+```
+如何理解达成共识这个单词啊，其实就是一致性的另外一种说法而已，例如：开会研究达成了共识，意思
+就是说意见统一了！
+```
+## leader的选举(Leader election)
+## 日志复制(Log Replication)
+## 安全性(Safety)
