@@ -5,13 +5,15 @@ import (
 	"github.com/iris-contrib/middleware/cors"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/core/router"
+	"raft/config"
 	"raft/server"
+	"strconv"
 )
 
 func main() {
 	fmt.Println("Raft服务启动")
 	app := route()
-	_ = app.Listen(":12600")
+	_ = app.Run(iris.Addr(config.Conf.Server.Domain + ":" + strconv.Itoa(config.Conf.Server.Port)))
 }
 
 func route() (app *iris.Application) {

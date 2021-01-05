@@ -7,6 +7,7 @@ type Node struct {
 	Id    string `json:"id"`
 	Ip    string `json:"ip"`
 	Port  int    `json:"port"`
+	Term  int    `json:"term"`
 	Nodes []Node `json:"nodes"`
 }
 
