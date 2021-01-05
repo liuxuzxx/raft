@@ -14,5 +14,11 @@ Raft是一个共识的算法！
 就是说意见统一了！
 ```
 ## leader的选举(Leader election)
+### leader选举的规定
+1. Election Safety:在某个时代，最多一个leader被选出出来
+2. Leader Append-Only:leader不能覆盖或者是删除他自己的log，他只能新增新的log
+3. Log Matching:如果两条log一样，那么他们之前的log都一样
+4. Leader Completeness:凡是写入到log的，必须是大部分节点都已经写入成功的时候才会写入到log
+5. State Machine Safety:如果一个index所指引的log被应用到状态机了，那么其他的服务不允许使用这个index了
 ## 日志复制(Log Replication)
 ## 安全性(Safety)
