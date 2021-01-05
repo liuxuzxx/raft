@@ -1,0 +1,4 @@
+server:
+  domain: 172.16.16.46
+  port: 12309
+  name: Raft
