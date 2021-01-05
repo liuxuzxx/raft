@@ -1,0 +1,24 @@
+# Raft
+## 总结
+```
+Raft协议是一个一致性的协议，算是简单版本的Paxos协议的变通实现，需要真实的使用Go代码
+来实现一下，帮助理解，也揭开这些个所谓协议的神秘面纱！
+```
+
+# In Search of an Understandable Consensus Algorithm (Extend Version)
+
+## 概述
+Raft是一个共识的算法！
+```
+如何理解达成共识这个单词啊，其实就是一致性的另外一种说法而已，例如：开会研究达成了共识，意思
+就是说意见统一了！
+```
+## leader的选举(Leader election)
+### leader选举的规定
+1. Election Safety:在某个时代，最多一个leader被选出出来
+2. Leader Append-Only:leader不能覆盖或者是删除他自己的log，他只能新增新的log
+3. Log Matching:如果两条log一样，那么他们之前的log都一样
+4. Leader Completeness:凡是写入到log的，必须是大部分节点都已经写入成功的时候才会写入到log
+5. State Machine Safety:如果一个index所指引的log被应用到状态机了，那么其他的服务不允许使用这个index了
+## 日志复制(Log Replication)
+## 安全性(Safety)
