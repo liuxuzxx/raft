@@ -13,8 +13,8 @@ type Vote struct {
 type VoteResult int
 
 const (
-	Agree = 1
-	Oppose
+	Agree  VoteResult = 1
+	Oppose VoteResult = 2
 )
 
 type VoteResponse struct {

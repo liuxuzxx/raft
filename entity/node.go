@@ -8,14 +8,3 @@ type Raft struct {
 	Version string `json:"version"`
 	Detail  string `json:"detail"`
 }
-
-//
-// Node的三种状态的类型
-//
-type NodeType int32
-
-const (
-	Follower  NodeType = 1
-	Candidate NodeType = 2
-	Leader    NodeType = 3
-)
