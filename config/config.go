@@ -23,8 +23,8 @@ var Conf Config
 
 func init() {
 	fmt.Println("开始加载配置信息....")
-	viper.AddConfigPath("./config")
-	viper.SetConfigName("config")
+	viper.SetConfigFile("./config/config.yml")
+	viper.SetConfigType("yml")
 	viper.WatchConfig()
 	viper.OnConfigChange(func(e fsnotify.Event) {
 		fmt.Println("Update the config file")
