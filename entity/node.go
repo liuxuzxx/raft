@@ -1,9 +1,8 @@
 package entity
 
 //
-// 服务节点的数据类型定义
+// 系统基本配置信息
 //
-
 type Raft struct {
 	Name    string `json:"name"`
 	Version string `json:"version"`
