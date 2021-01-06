@@ -15,10 +15,13 @@ type Config struct {
 }
 
 type Server struct {
-	Domain string `json:"domain"`
-	Port   int    `json:"port"`
-	Name   string `json:"name"`
-	Nodes  []Node `json:"nodes"`
+	Id     string   `json:"id"`
+	Domain string   `json:"domain"`
+	Port   int      `json:"port"`
+	Name   string   `json:"name"`
+	Nodes  []Node   `json:"nodes"`
+	Type   NodeType `json:"type"`
+	Term   int      `json:"term"`
 }
 
 type Node struct {
@@ -27,6 +30,17 @@ type Node struct {
 	Port int    `json:"port"`
 	Term int    `json:"term"`
 }
+
+//
+// Node的三种状态的类型
+//
+type NodeType int32
+
+const (
+	Follower  NodeType = 1
+	Candidate NodeType = 2
+	Leader    NodeType = 3
+)
 
 var Conf Config
 
@@ -45,5 +59,6 @@ func init() {
 	err = viper.Unmarshal(&Conf)
 
 	jsonString, _ := json.Marshal(&Conf)
+	Conf.Server.Type = Follower
 	fmt.Printf("查看加载的config配置信息:%s", string(jsonString))
 }
