@@ -6,6 +6,7 @@ import (
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/core/router"
 	"raft/config"
+	"raft/rest"
 	"raft/server"
 	"strconv"
 )
@@ -23,6 +24,7 @@ func route() (app *iris.Application) {
 	{
 		v1.Get("/information", server.RaftInformation)
 		v1.PartyFunc("/election-leader", func(leaderParty router.Party) {
+			leaderParty.Post("/vote", rest.Vote)
 		})
 	}
 	return app
