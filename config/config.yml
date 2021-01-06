@@ -1,4 +1,4 @@
 server:
-  domain: 192.168.31.187
+  domain: localhost
   port: 12309
   name: Raft
