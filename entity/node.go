@@ -3,13 +3,6 @@ package entity
 //
 // 服务节点的数据类型定义
 //
-type Node struct {
-	Id    string `json:"id"`
-	Ip    string `json:"ip"`
-	Port  int    `json:"port"`
-	Term  int    `json:"term"`
-	Nodes []Node `json:"nodes"`
-}
 
 type Raft struct {
 	Name    string `json:"name"`

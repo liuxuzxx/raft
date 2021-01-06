@@ -2,3 +2,4 @@ server:
   domain: localhost
   port: 12309
   name: Raft
+  nodes: [{id: 1,ip: localhost,port: 12310,term: 1},{id: 1,ip: localhost,port: 12311,term: 1},{id: 1,ip: localhost,port: 12312,term: 1}]
