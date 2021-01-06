@@ -24,7 +24,7 @@ type ElectionLeader struct {
 	IsVote bool
 }
 
-func (e ElectionLeader) ExecuteVote(vote entity.Vote) entity.VoteResponse {
+func (e *ElectionLeader) ExecuteVote(vote entity.Vote) entity.VoteResponse {
 	if e.IsVote {
 		return entity.VoteResponse{
 			VoteId:   e.Id,
