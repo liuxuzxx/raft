@@ -15,7 +15,7 @@ func triggerElection() {
 	defer timer.Stop()
 
 	<-timer.C
-	fmt.Println("定时器爆炸，开始启动election....")
+	fmt.Println("开始election leader... start RPC vote")
 }
 
 func init() {
