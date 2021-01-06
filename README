@@ -20,5 +20,17 @@ Raft是一个共识的算法！
 3. Log Matching:如果两条log一样，那么他们之前的log都一样
 4. Leader Completeness:凡是写入到log的，必须是大部分节点都已经写入成功的时候才会写入到log
 5. State Machine Safety:如果一个index所指引的log被应用到状态机了，那么其他的服务不允许使用这个index了
+### leader的选举过程
+1. 各个node采用心跳的机制出发leader的选举
+2. 当node启动的时候是Follower角色
+3. Follower给自己的term+1，然后修改自己的角色为candidate，并且给自己投一票
+4. 在此之后接收到别的RPC投票请求一律投递不同意
+5. 宣传自己，朝向各个node发送投票的请求
+6. 遇到以下三种情形决定生死：
+```
+1.这个node赢得了这次选举(超过半数的node投了他的票)
+2.其他node获得了选举，并朝向他发送了通知(leader广而告之)
+3.一个周期时间过后，没有任何胜者(预示着开始新一轮投票的开始)
+```
 ## 日志复制(Log Replication)
 ## 安全性(Safety)
