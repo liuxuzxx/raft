@@ -5,6 +5,7 @@ import (
 	"github.com/iris-contrib/middleware/cors"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/core/router"
+	"os"
 	"raft/config"
 	"raft/rest"
 	"raft/server"
@@ -13,6 +14,12 @@ import (
 
 func main() {
 	fmt.Println("Raft服务启动")
+	args := os.Args
+	if len(args) < 2 {
+		fmt.Printf("请携带上config文件的地址参数信息...")
+		return
+	}
+	config.InitConfig(args[1])
 	app := route()
 	_ = app.Run(iris.Addr(config.Conf.Server.Domain + ":" + strconv.Itoa(config.Conf.Server.Port)))
 }

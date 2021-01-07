@@ -44,9 +44,9 @@ const (
 
 var Conf Config
 
-func init() {
+func InitConfig(configPath string) {
 	fmt.Println("开始加载配置信息....")
-	viper.SetConfigFile("./config/config.yml")
+	viper.SetConfigFile(configPath)
 	viper.SetConfigType("yml")
 	viper.WatchConfig()
 	viper.OnConfigChange(func(e fsnotify.Event) {
