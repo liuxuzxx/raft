@@ -1,7 +1,0 @@
-server:
-  id: liuxu-raft-12309
-  domain: 172.16.16.46
-  port: 12309
-  name: Raft
-  term: 1
-  nodes: [{id: 1,ip: localhost,port: 12310,term: 1},{id: 1,ip: localhost,port: 12311,term: 1},{id: 1,ip: localhost,port: 12312,term: 1}]
