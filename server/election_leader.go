@@ -78,9 +78,9 @@ func (e *ElectionLeader) initiateVote() {
 		_ = json.Unmarshal(responseBytes, voteResponse)
 		if voteResponse.Result == entity.Agree {
 			e.AgreeCount = e.AgreeCount + 1
-			fmt.Printf("%s 投了我一票\n", voteResponse.VoteId)
+			fmt.Printf("投票者：%s 投了我一票\n", voteResponse.VoteId)
 		} else {
-			fmt.Printf("%s 给我投递了反对票！\n", voteResponse.VoteId)
+			fmt.Printf("投票者：%s 给我投递了反对票！\n", voteResponse.VoteId)
 		}
 	}
 }
@@ -92,10 +92,10 @@ func randomMillis() time.Duration {
 	return time.Millisecond * time.Duration(interval)
 }
 
-var Election ElectionLeader
+var Election *ElectionLeader
 
-func init() {
-	Election = ElectionLeader{
+func InitElectionLeader() {
+	Election = &ElectionLeader{
 		Id:     config.Conf.Server.Id,
 		Term:   config.Conf.Server.Term,
 		Type:   config.Conf.Server.Type,
