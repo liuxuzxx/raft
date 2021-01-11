@@ -12,7 +12,7 @@ import (
 //
 
 func Vote(ctx iris.Context) {
-	vote := &entity.Vote{}
+	vote := &entity.VoteRequest{}
 	if err := ctx.ReadJSON(vote); err != nil {
 		_, _ = ctx.JSON(entity.VoteResponse{
 			VoteId:   config.Conf.Server.Id,
