@@ -60,5 +60,5 @@ func InitConfig(configPath string) {
 
 	jsonString, _ := json.Marshal(&Conf)
 	Conf.Server.Type = Follower
-	fmt.Printf("查看加载的config配置信息:%s", string(jsonString))
+	fmt.Printf("查看加载的config配置信息:%s\n", string(jsonString))
 }

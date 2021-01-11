@@ -21,6 +21,7 @@ func main() {
 	}
 	fmt.Printf("传入的配置文件路径参数:%s\n", args[1])
 	config.InitConfig(args[1])
+	server.InitElectionLeader()
 	app := route()
 	_ = app.Run(iris.Addr(config.Conf.Server.Domain + ":" + strconv.Itoa(config.Conf.Server.Port)))
 }
