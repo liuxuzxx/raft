@@ -4,7 +4,7 @@ package entity
 // election leader的实体类信息
 //
 
-type Vote struct {
+type VoteRequest struct {
 	Id       string `json:"id"`
 	Term     int    `json:"term"`
 	Describe string `json:"describe"`

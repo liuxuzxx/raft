@@ -24,7 +24,7 @@ type ElectionLeader struct {
 	IsVote bool
 }
 
-func (e *ElectionLeader) ExecuteVote(vote entity.Vote) entity.VoteResponse {
+func (e *ElectionLeader) ExecuteVote(vote entity.VoteRequest) entity.VoteResponse {
 	if e.IsVote {
 		return entity.VoteResponse{
 			VoteId:   e.Id,
@@ -45,7 +45,7 @@ func (e *ElectionLeader) ExecuteVote(vote entity.Vote) entity.VoteResponse {
 // election leader:leader的选举
 //
 
-func triggerElection() {
+func (e *ElectionLeader) triggerElection() {
 	timer := time.NewTimer(randomMillis())
 	defer timer.Stop()
 	<-timer.C
@@ -62,11 +62,12 @@ func randomMillis() time.Duration {
 var Election ElectionLeader
 
 func init() {
-	go triggerElection()
 	Election = ElectionLeader{
 		Id:     config.Conf.Server.Id,
 		Term:   config.Conf.Server.Term,
 		Type:   config.Conf.Server.Type,
 		IsVote: false,
 	}
+
+	go Election.triggerElection()
 }
