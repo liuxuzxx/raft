@@ -74,7 +74,8 @@ func (e *ElectionLeader) initiateVote() {
 		}
 		resp, err := client.Do(request)
 		if err != nil {
-			fmt.Println(err)
+			fmt.Printf("发向:%s 的投票出现错误，可能是node没有启动导致的！\n", node.Id)
+			continue
 		}
 		responseBytes, _ := ioutil.ReadAll(resp.Body)
 		voteResponse := &entity.VoteResponse{}
