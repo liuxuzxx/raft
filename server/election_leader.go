@@ -73,6 +73,10 @@ func (e *ElectionLeader) initiateVote() {
 			fmt.Println(err)
 		}
 		resp, err := client.Do(request)
+		if err != nil {
+			fmt.Printf("发向:%s 的投票出现错误，可能是node没有启动导致的！\n", node.Id)
+			continue
+		}
 		responseBytes, _ := ioutil.ReadAll(resp.Body)
 		voteResponse := &entity.VoteResponse{}
 		_ = json.Unmarshal(responseBytes, voteResponse)
@@ -87,7 +91,7 @@ func (e *ElectionLeader) initiateVote() {
 
 func randomMillis() time.Duration {
 	rand.Seed(time.Now().UnixNano())
-	interval := rand.Intn(150) + 15000
+	interval := rand.Intn(150) + 150
 	fmt.Printf("获取的随机时间是:%d\n", interval)
 	return time.Millisecond * time.Duration(interval)
 }
