@@ -31,11 +31,11 @@ type ElectionLeader struct {
 }
 
 func (e *ElectionLeader) ExecuteVote(vote entity.VoteRequest) entity.VoteResponse {
-	if e.IsVote {
+	if e.IsVote && e.Type == config.Follower {
 		return entity.VoteResponse{
 			VoteId:   e.Id,
 			Result:   entity.Oppose,
-			Describe: "已经给别人投递过票了，所以不能给您投票了！",
+			Describe: "我不是Follower,或者是已经给别人投递过票了，所以不能给您投票了！",
 		}
 	}
 	e.VoteId = vote.Id
