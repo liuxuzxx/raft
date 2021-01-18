@@ -31,7 +31,7 @@ type ElectionLeader struct {
 }
 
 func (e *ElectionLeader) ExecuteVote(vote entity.VoteRequest) entity.VoteResponse {
-	if e.IsVote && e.Type != config.Follower {
+	if e.IsVote || e.Type != config.Follower {
 		return entity.VoteResponse{
 			VoteId:   e.Id,
 			Result:   entity.Oppose,
@@ -40,6 +40,7 @@ func (e *ElectionLeader) ExecuteVote(vote entity.VoteRequest) entity.VoteRespons
 	}
 	e.VoteId = vote.Id
 	e.IsVote = true
+	e.Type = config.Follower
 	return entity.VoteResponse{
 		VoteId:   e.Id,
 		Result:   entity.Agree,
@@ -96,13 +97,16 @@ func (e *ElectionLeader) sendVote() {
 }
 
 func (e *ElectionLeader) switchRole() {
-	e.Type = config.Candidate
-	e.AgreeCount = 1
+	if !e.IsVote {
+		e.Type = config.Candidate
+		e.IsVote = true
+		e.AgreeCount = 1
+	}
 }
 
 func randomMillis() time.Duration {
 	rand.Seed(time.Now().UnixNano())
-	interval := rand.Intn(150) + 150
+	interval := rand.Intn(5) + 150
 	fmt.Printf("获取的随机时间是:%d\n", interval)
 	return time.Millisecond * time.Duration(interval)
 }
