@@ -4,4 +4,4 @@ server:
   port: 12310
   name: Raft
   term: 1
-  nodes: [{id: liuxu-raft-12314,ip: 172.16.16.46,port: 12314,term: 1},{id: liuxu-raft-12311,ip: 172.16.16.46,port: 12311,term: 1},{id: liuxu-raft-12312,ip: 172.16.16.46,port: 12312,term: 1},{id: liuxu-raft-12313,ip: 172.16.16.46,port: 12313,term: 1}]
+  nodes: [{id: liuxu-raft-12311,ip: 172.16.16.46,port: 12311,term: 1},{id: liuxu-raft-12312,ip: 172.16.16.46,port: 12312,term: 1},{id: liuxu-raft-12313,ip: 172.16.16.46,port: 12313,term: 1},{id: liuxu-raft-12314,ip: 172.16.16.46,port: 12314,term: 1}]
