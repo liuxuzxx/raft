@@ -31,7 +31,7 @@ type ElectionLeader struct {
 }
 
 func (e *ElectionLeader) ExecuteVote(vote entity.VoteRequest) entity.VoteResponse {
-	if e.IsVote && e.Type == config.Follower {
+	if e.IsVote && e.Type != config.Follower {
 		return entity.VoteResponse{
 			VoteId:   e.Id,
 			Result:   entity.Oppose,
@@ -60,6 +60,12 @@ func (e *ElectionLeader) triggerElection() {
 }
 
 func (e *ElectionLeader) initiateVote() {
+	e.switchRole()
+	e.sendVote()
+	fmt.Printf("节点：%s 获取的投票数量是：%d\n", e.Id, e.AgreeCount)
+}
+
+func (e *ElectionLeader) sendVote() {
 	for _, node := range config.Conf.Server.Nodes {
 		client := &http.Client{}
 		jsonBytes, _ := json.Marshal(entity.VoteRequest{
@@ -87,6 +93,11 @@ func (e *ElectionLeader) initiateVote() {
 			fmt.Printf("投票者：%s 给我投递了反对票！\n", voteResponse.VoteId)
 		}
 	}
+}
+
+func (e *ElectionLeader) switchRole() {
+	e.Type = config.Candidate
+	e.AgreeCount = 1
 }
 
 func randomMillis() time.Duration {
