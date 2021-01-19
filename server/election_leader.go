@@ -10,6 +10,7 @@ import (
 	"raft/config"
 	"raft/entity"
 	"strconv"
+	"sync"
 	"time"
 )
 
@@ -28,10 +29,13 @@ type ElectionLeader struct {
 	VoteId     string
 	IsVote     bool
 	AgreeCount int
+	lock       sync.Mutex
 }
 
 func (e *ElectionLeader) ExecuteVote(vote entity.VoteRequest) entity.VoteResponse {
-	if e.IsVote && e.Type != config.Follower {
+	e.lock.Lock()
+	defer e.lock.Unlock()
+	if e.IsVote || e.Type != config.Follower {
 		return entity.VoteResponse{
 			VoteId:   e.Id,
 			Result:   entity.Oppose,
@@ -40,6 +44,7 @@ func (e *ElectionLeader) ExecuteVote(vote entity.VoteRequest) entity.VoteRespons
 	}
 	e.VoteId = vote.Id
 	e.IsVote = true
+	e.Type = config.Follower
 	return entity.VoteResponse{
 		VoteId:   e.Id,
 		Result:   entity.Agree,
@@ -60,6 +65,8 @@ func (e *ElectionLeader) triggerElection() {
 }
 
 func (e *ElectionLeader) initiateVote() {
+	e.lock.Lock()
+	defer e.lock.Unlock()
 	e.switchRole()
 	e.sendVote()
 	fmt.Printf("节点：%s 获取的投票数量是：%d\n", e.Id, e.AgreeCount)
@@ -96,13 +103,16 @@ func (e *ElectionLeader) sendVote() {
 }
 
 func (e *ElectionLeader) switchRole() {
-	e.Type = config.Candidate
-	e.AgreeCount = 1
+	if !e.IsVote {
+		e.Type = config.Candidate
+		e.IsVote = true
+		e.AgreeCount = 1
+	}
 }
 
 func randomMillis() time.Duration {
 	rand.Seed(time.Now().UnixNano())
-	interval := rand.Intn(150) + 150
+	interval := rand.Intn(1) + 150
 	fmt.Printf("获取的随机时间是:%d\n", interval)
 	return time.Millisecond * time.Duration(interval)
 }
