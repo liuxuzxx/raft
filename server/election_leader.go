@@ -54,6 +54,8 @@ func (e *ElectionLeader) ExecuteVote(vote entity.VoteRequest) entity.VoteRespons
 
 func (e *ElectionLeader) FollowerLeader(authority entity.LeaderAuthorityRequest) entity.FollowerAuthorityResponse {
 	fmt.Printf("节点:%s 接收到了Leader的权威心跳:%s，任期为:%d\n", e.Id, authority.LeaderId, authority.Term)
+	e.Type = config.Follower
+	e.IsVote = true
 	return entity.FollowerAuthorityResponse{
 		FollowerId: e.Id,
 	}
