@@ -34,6 +34,7 @@ func route() (app *iris.Application) {
 		v1.Get("/information", server.RaftInformation)
 		v1.PartyFunc("/election-leader", func(leaderParty router.Party) {
 			leaderParty.Post("/vote", rest.Vote)
+			leaderParty.Post("/follower", rest.MaintainAuthority)
 		})
 	}
 	return app
