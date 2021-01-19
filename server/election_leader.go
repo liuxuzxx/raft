@@ -10,6 +10,7 @@ import (
 	"raft/config"
 	"raft/entity"
 	"strconv"
+	"sync"
 	"time"
 )
 
@@ -28,9 +29,12 @@ type ElectionLeader struct {
 	VoteId     string
 	IsVote     bool
 	AgreeCount int
+	lock       sync.Mutex
 }
 
 func (e *ElectionLeader) ExecuteVote(vote entity.VoteRequest) entity.VoteResponse {
+	e.lock.Lock()
+	defer e.lock.Unlock()
 	if e.IsVote || e.Type != config.Follower {
 		return entity.VoteResponse{
 			VoteId:   e.Id,
@@ -61,6 +65,8 @@ func (e *ElectionLeader) triggerElection() {
 }
 
 func (e *ElectionLeader) initiateVote() {
+	e.lock.Lock()
+	defer e.lock.Unlock()
 	e.switchRole()
 	e.sendVote()
 	fmt.Printf("节点：%s 获取的投票数量是：%d\n", e.Id, e.AgreeCount)
