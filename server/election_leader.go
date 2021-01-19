@@ -106,7 +106,7 @@ func (e *ElectionLeader) switchRole() {
 
 func randomMillis() time.Duration {
 	rand.Seed(time.Now().UnixNano())
-	interval := rand.Intn(5) + 150
+	interval := rand.Intn(1) + 150
 	fmt.Printf("获取的随机时间是:%d\n", interval)
 	return time.Millisecond * time.Duration(interval)
 }
