@@ -27,7 +27,11 @@ type VoteResponse struct {
 //当leader选举出来之后，需要周期的发送心跳给其他
 //的没有在这个Term当选的node，来建立权威
 //
-type LeaderAuthority struct {
-	LeaderId string
-	Term     int
+type LeaderAuthorityRequest struct {
+	LeaderId string `json:"leaderId"`
+	Term     int    `json:"term"`
+}
+
+type FollowerAuthorityResponse struct {
+	FollowerId string `json:"followerId"`
 }
