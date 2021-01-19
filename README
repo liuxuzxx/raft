@@ -46,4 +46,13 @@ Raft是一个共识的算法！
 不过在启动的时候，也需要时间，第一轮投票基本上无法决定leader，需要第二轮投票！
 ```
 ## 日志复制(Log Replication)
+### 解释
+```
+一旦Leader被elected被选举出来之后，Leader节点开始服务于客户端的请求.客户端发送带有一定
+类型的命令请求到Leader节点.Leader添加命令到自己的log(这个log不是我们的INFO ERROR这种
+记录类型的log日志，而是数据库.),然后开始并行的发送给下面所有Follower Node节点,只有当被
+安全的复制到Follower Node集群的时候(这个安全的意思是大部分Follower Node都已经复制成功了)
+才会被应用到Leader的state machine当中，并且归还结果给客户端(如果一直不成功，岂不是卡死了!)
+.如果出现网络包丢失，Followers挂掉，或者运行很慢，那么就循环发送，直到回复为止.
+```
 ## 安全性(Safety)

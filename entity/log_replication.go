@@ -10,3 +10,9 @@ const (
 	Get CommandType = "get"
 	Set CommandType = "set"
 )
+
+type CommandRequest struct {
+	Type  CommandType `json:"type"`
+	Key   string      `json:"key"`
+	Value string      `json:"value"`
+}
