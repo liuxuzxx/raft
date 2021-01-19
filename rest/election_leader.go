@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"fmt"
 	"github.com/kataras/iris/v12"
 	"raft/config"
 	"raft/entity"
@@ -22,4 +23,13 @@ func Vote(ctx iris.Context) {
 		return
 	}
 	_, _ = ctx.JSON(server.Election.ExecuteVote(*vote))
+}
+
+func MaintainAuthority(ctx iris.Context) {
+	authority := &entity.LeaderAuthorityRequest{}
+	if err := ctx.ReadJSON(authority); err != nil {
+		fmt.Println(err)
+		panic(err)
+	}
+	_, _ = ctx.JSON(server.Election.FollowerLeader(*authority))
 }

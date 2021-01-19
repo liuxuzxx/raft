@@ -52,6 +52,13 @@ func (e *ElectionLeader) ExecuteVote(vote entity.VoteRequest) entity.VoteRespons
 	}
 }
 
+func (e *ElectionLeader) FollowerLeader(authority entity.LeaderAuthorityRequest) entity.FollowerAuthorityResponse {
+	fmt.Printf("节点:%s 接收到了Leader的权威心跳:%s，任期为:%d\n", e.Id, authority.LeaderId, authority.Term)
+	return entity.FollowerAuthorityResponse{
+		FollowerId: e.Id,
+	}
+}
+
 //
 // election leader:leader的选举
 //
@@ -70,6 +77,7 @@ func (e *ElectionLeader) initiateVote() {
 	e.switchRole()
 	e.sendVote()
 	fmt.Printf("节点：%s 获取的投票数量是：%d\n", e.Id, e.AgreeCount)
+	e.maintainAuthority()
 }
 
 func (e *ElectionLeader) sendVote() {
@@ -110,9 +118,35 @@ func (e *ElectionLeader) switchRole() {
 	}
 }
 
+func (e *ElectionLeader) maintainAuthority() {
+	if e.AgreeCount > (len(config.Conf.Server.Nodes)+1)/2 {
+		for _, node := range config.Conf.Server.Nodes {
+			client := &http.Client{}
+			jsonBytes, _ := json.Marshal(entity.LeaderAuthorityRequest{
+				LeaderId: e.Id,
+				Term:     e.Term,
+			})
+			url := "http://" + node.Ip + ":" + strconv.Itoa(node.Port) + "/v1.0.0/raft/election-leader/follower"
+			request, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(jsonBytes))
+			if err != nil {
+				fmt.Println(err)
+			}
+			resp, err := client.Do(request)
+			if err != nil {
+				fmt.Printf("发向:%s 的Authority权威建立出现问题，可能是node没有启动导致的！\n", node.Id)
+				continue
+			}
+			responseBytes, _ := ioutil.ReadAll(resp.Body)
+			followerResponse := &entity.FollowerAuthorityResponse{}
+			_ = json.Unmarshal(responseBytes, followerResponse)
+			fmt.Printf("查看Follower的返回结果:%s\n", followerResponse.FollowerId)
+		}
+	}
+}
+
 func randomMillis() time.Duration {
 	rand.Seed(time.Now().UnixNano())
-	interval := rand.Intn(1) + 150
+	interval := rand.Intn(150) + 150
 	fmt.Printf("获取的随机时间是:%d\n", interval)
 	return time.Millisecond * time.Duration(interval)
 }
