@@ -16,3 +16,10 @@ type CommandRequest struct {
 	Key   string      `json:"key"`
 	Value string      `json:"value"`
 }
+
+type DBEntry struct {
+	Index int    `json:"index"`
+	Term  int    `json:"term"`
+	Key   string `json:"key"`
+	Value string `json:"value"`
+}

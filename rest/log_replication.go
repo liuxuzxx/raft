@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/kataras/iris/v12"
 	"raft/entity"
+	"raft/server"
 )
 
 //
@@ -16,4 +17,6 @@ func Command(ctx iris.Context) {
 		fmt.Println(err)
 		panic(err)
 	}
+	server.LogReplication.Save(*command)
+	_, _ = ctx.JSON("success save data!")
 }
