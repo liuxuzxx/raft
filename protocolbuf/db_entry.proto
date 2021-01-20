@@ -1,0 +1,7 @@
+syntax = "proto3";
+package log;
+
+message LogEntry{
+  int32 term = 1;
+  string key = 2;
+}

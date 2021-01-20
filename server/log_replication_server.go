@@ -53,7 +53,7 @@ func (l *LogReplicationServer) appendLog(logEntry entity.DBEntry) {
 	defer logFile.Close()
 	write := bufio.NewWriter(logFile)
 	jsonBytes, _ := json.Marshal(logEntry)
-	_, err = write.WriteString(string(jsonBytes))
+	_, err = write.WriteString(strconv.Itoa(len(jsonBytes)) + string(jsonBytes))
 
 	err = write.Flush()
 	if err != nil {
