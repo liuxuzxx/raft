@@ -2,11 +2,12 @@ package server
 
 import (
 	"bufio"
-	"encoding/json"
 	"fmt"
+	"github.com/golang/protobuf/proto"
 	"os"
 	"path/filepath"
 	"raft/entity"
+	log "raft/pb"
 	"strconv"
 	"sync"
 )
@@ -16,8 +17,8 @@ import (
 // log复制，持久化到本地
 //
 type LogReplicationServer struct {
-	dataMap  map[string]entity.DBEntry
-	index    int
+	dataMap  map[string]log.LogEntry
+	index    int64
 	path     string
 	fileName string
 	mux      sync.RWMutex
@@ -26,13 +27,13 @@ type LogReplicationServer struct {
 func (l *LogReplicationServer) Save(command entity.CommandRequest) {
 	l.mux.Lock()
 	l.index = l.index + 1
-	entry := entity.DBEntry{
+	entry := &log.LogEntry{
 		Index: l.index,
 		Term:  0,
 		Key:   command.Key,
 		Value: command.Value,
 	}
-	l.dataMap[command.Key+strconv.Itoa(l.index)] = entry
+	l.dataMap[command.Key+strconv.FormatInt(l.index, 10)] = *entry
 	l.appendLog(entry)
 	l.mux.Unlock()
 	//l.debugDataMap()
@@ -45,15 +46,15 @@ func (l *LogReplicationServer) debugDataMap() {
 	}
 }
 
-func (l *LogReplicationServer) appendLog(logEntry entity.DBEntry) {
+func (l *LogReplicationServer) appendLog(logEntry *log.LogEntry) {
 	logFile, err := os.OpenFile(filepath.Join(l.path, l.fileName), os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		panic(err)
 	}
 	defer logFile.Close()
 	write := bufio.NewWriter(logFile)
-	jsonBytes, _ := json.Marshal(logEntry)
-	_, err = write.WriteString(strconv.Itoa(len(jsonBytes)) + string(jsonBytes))
+	jsonBytes, _ := proto.Marshal(logEntry)
+	_, err = write.Write(jsonBytes)
 
 	err = write.Flush()
 	if err != nil {
@@ -70,7 +71,7 @@ var LogReplication *LogReplicationServer
 
 func init() {
 	LogReplication = &LogReplicationServer{
-		dataMap:  make(map[string]entity.DBEntry, 0),
+		dataMap:  make(map[string]log.LogEntry, 0),
 		index:    0,
 		path:     "./log",
 		fileName: "log.raft",
