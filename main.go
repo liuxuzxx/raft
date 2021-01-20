@@ -36,6 +36,9 @@ func route() (app *iris.Application) {
 			leaderParty.Post("/vote", rest.Vote)
 			leaderParty.Post("/follower", rest.MaintainAuthority)
 		})
+		v1.PartyFunc("/log-replication", func(logParty router.Party) {
+			logParty.Post("/keys", rest.Command)
+		})
 	}
 	return app
 }
